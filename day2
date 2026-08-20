@@ -1,0 +1,30 @@
+ Functional Requirements
+   
+User registration with personal details
+Anonymous user access option
+Data input and submission handling
+Validation of user input
+Store data in database
+Display success or error messages
+   
+🔹 Non-Functional Requirements
+   
+System should be secure
+Data should be stored safely
+Fast response time for user actions
+Easy and simple user interface
+System should handle multiple users
+   
+🔹 Hardware Requirements
+   
+Any computer or laptop
+Minimum 4GB RAM
+Stable internet connection 
+   
+🔹 Software Requirements
+   
+Operating System: Windows / Linux
+Frontend: HTML, CSS, JavaScript (conceptual for now)
+Backend: Node.js / Python (future use)
+Database: SQLite / MySQL / MongoDB
+Code Editor: VS Code
