@@ -1,0 +1,5 @@
+I explored the INDICA Dataset from HuggingFace to understand audio and text-based datasets. I analyzed multilingual data, including Kannada audio samples, and studied how such datasets are useful for cybercrime analysis and machine learning applications.
+
+below are the links of those datasets 
+https://huggingface.co/datasets/vikrant-vikram/INDICA/resolve/32b34769b72ae0c5fb18acb22522e6106add0ef7/Kannada_audio.tar.gz
+https://huggingface.co/datasets/vikrant-vikram/INDICA
