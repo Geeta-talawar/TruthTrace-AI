@@ -1,0 +1,44 @@
+SYSTEM ARCHITECTURE:
+
+User / Anonymous User
+          │
+          ▼
+ Registration / Guest Access
+          │
+          ▼
+ Device Fingerprinting
+          │
+          ▼
+ Evidence Upload
+          │
+          ▼
+ Metadata Extraction
+          │
+          ▼
+ Evidence Compression (ZIP)
+          │
+          ▼
+ Secure Cloud Storage
+          │
+          ▼
+ Retrieve Archived Evidence
+          │
+          ▼
+ AI Evidence Analysis
+          │
+          ▼
+ SHA-256 Hash Generation
+          │
+          ▼
+ Tamper-Proof Verification
+          │
+          ▼
+ Blockchain Ledger
+(Hash + Timestamp + Chain of Custody)
+          │
+          ▼
+ Investigation Dashboard
+          │
+          ▼
+ Report Generation
+
