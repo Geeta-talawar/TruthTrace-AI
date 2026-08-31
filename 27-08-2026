@@ -1,0 +1,5 @@
+On this day, I explored datasets from different platforms such as UCF Crime Dataset (HuggingFace version) and a shared Dropbox dataset folder. I focused on comparing dataset formats, structure, and labeling across different sources. This helped me understand the quality of datasets and how they can be used for machine learning model training.
+
+below are the links of thse datasets 
+https://www.dropbox.com/scl/fo/2aczdnx37hxvcfdo4rq4q/AOjRokSTaiKxXmgUyqdcI6k?rlkey=5bg7mxxbq46t7aujfch46dlvz&e=1&st=e6onnftd&dl=0
+https://huggingface.co/datasets/hibana2077/UCF-Crime-Dataset
