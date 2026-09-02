@@ -1,0 +1,51 @@
+Today, I implemented the audio fraud detection modules, including audio preprocessing, quality assessment, Wav2Vec2 feature extraction, classification, training, validation, evaluation metrics, checkpoint management, and inference. I also started downloading the INDICA English audio dataset for further dataset preparation and model training.
+from datasets import load_dataset, Audio
+
+DATASET_NAME = "vikrant-vikram/INDICA"
+
+print("Loading INDICA dataset...")
+
+dataset = load_dataset(
+    DATASET_NAME,
+    streaming=True
+)
+
+print("\nAvailable splits:")
+for split in dataset:
+    print("-", split)
+
+# Get the train split
+train_dataset = dataset["train"]
+
+# Do NOT decode audio yet
+train_dataset = train_dataset.cast_column(
+    "audio",
+    Audio(decode=False)
+)
+
+print("\nDataset features:")
+print(train_dataset.features)
+
+print("\nReading one sample...")
+
+sample = next(iter(train_dataset))
+
+print("\n==============================")
+print("ONE SAMPLE")
+print("==============================")
+
+for key, value in sample.items():
+
+    if key == "audio":
+        print("\nAudio:")
+        print(value)
+
+    else:
+        print(f"\n{key}:")
+        print(value)
+
+print("\n==============================")
+print("COLUMN NAMES")
+print("==============================")
+
+for key in sample.keys():
