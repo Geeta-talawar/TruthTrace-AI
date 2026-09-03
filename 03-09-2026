@@ -1,1 +1,5 @@
-
+Configured the INDICA English audio dataset for binary fraud and legitimate classification.
+Integrated the Wav2Vec2-based audio model with a classifier head.
+Frozen the pretrained Wav2Vec2 encoder and configured the optimizer to train only the classifier parameters.
+Verified the training and trainer modules for syntax errors and prepared the system for full-dataset training.
+Identified CPU processing time and limited system memory as the main training risks.
