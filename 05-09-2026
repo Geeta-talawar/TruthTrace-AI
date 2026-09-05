@@ -1,0 +1,352 @@
+Implemented Flask routing to serve the index.html interface and connected the /predict API with the trained Wav2Vec2 model. Tested the complete audio upload-to-prediction workflow and verified Fraud/Legit results with confidence values
+index.html
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>INDICA - Audio Fraud Detection</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 500px;
+        max-width: 90%;
+        margin: 80px auto;
+        background: white;
+        padding: 35px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    h1 {
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    input[type="file"] {
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        background: #2563eb;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1d4ed8;
+    }
+
+    button:disabled {
+        background: #999;
+        cursor: not-allowed;
+    }
+
+    #status {
+        margin-top: 20px;
+        color: #555;
+    }
+
+    #result {
+        display: none;
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 8px;
+        background: #f1f5f9;
+    }
+
+    .result-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .result-value {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .probability {
+        margin: 8px 0;
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<div class="container">
+
+    <h1>INDICA</h1>
+
+    <div class="subtitle">
+        Audio Fraud Detection System
+    </div>
+
+    <input
+        type="file"
+        id="audioFile"
+        accept="audio/*"
+    >
+
+    <button
+        id="analyzeButton"
+        onclick="analyzeAudio()"
+    >
+        Analyze Audio
+    </button>
+
+    <div id="status"></div>
+
+    <div id="result">
+
+        <div class="result-title">
+            Prediction
+        </div>
+
+        <div
+            id="prediction"
+            class="result-value"
+        >
+        </div>
+
+        <div
+            id="confidence"
+            class="probability"
+        >
+        </div>
+
+        <div
+            id="legitProbability"
+            class="probability"
+        >
+        </div>
+
+        <div
+            id="fraudProbability"
+            class="probability"
+        >
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    async function analyzeAudio() {
+
+        const fileInput =
+            document.getElementById("audioFile");
+
+        const button =
+            document.getElementById("analyzeButton");
+
+        const status =
+            document.getElementById("status");
+
+        const result =
+            document.getElementById("result");
+
+
+        // ------------------------------------------------
+        // Check whether an audio file was selected
+        // ------------------------------------------------
+
+        if (fileInput.files.length === 0) {
+
+            status.innerText =
+                "Please select an audio file.";
+
+            return;
+        }
+
+
+        const audioFile =
+            fileInput.files[0];
+
+
+        // ------------------------------------------------
+        // Prepare uploaded audio
+        // ------------------------------------------------
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "audio",
+            audioFile
+        );
+
+
+        // ------------------------------------------------
+        // Update interface
+        // ------------------------------------------------
+
+        button.disabled = true;
+
+        button.innerText =
+            "Analyzing...";
+
+        status.innerText =
+            "Please wait while the audio is being analyzed.";
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            // --------------------------------------------
+            // Send audio to Flask backend
+            // --------------------------------------------
+
+            const response =
+                await fetch(
+                    "/predict",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            // --------------------------------------------
+            // Convert response to JSON
+            // --------------------------------------------
+
+            const data =
+                await response.json();
+
+
+            // --------------------------------------------
+            // Check for backend error
+            // --------------------------------------------
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error ||
+                    "Prediction failed."
+                );
+            }
+
+
+            // --------------------------------------------
+            // Display prediction
+            // --------------------------------------------
+
+            document.getElementById(
+                "prediction"
+            ).innerText =
+                data.prediction;
+
+
+            // --------------------------------------------
+            // Display confidence
+            // --------------------------------------------
+
+            document.getElementById(
+                "confidence"
+            ).innerText =
+                "Confidence: " +
+                (
+                    data.confidence * 100
+                ).toFixed(2) +
+                "%";
+
+
+            // --------------------------------------------
+            // Display legitimate probability
+            // --------------------------------------------
+
+            document.getElementById(
+                "legitProbability"
+            ).innerText =
+                "Legit Probability: " +
+                (
+                    data.legit_probability * 100
+                ).toFixed(2) +
+                "%";
+
+
+            // --------------------------------------------
+            // Display fraud probability
+            // --------------------------------------------
+
+            document.getElementById(
+                "fraudProbability"
+            ).innerText =
+                "Fraud Probability: " +
+                (
+                    data.fraud_probability * 100
+                ).toFixed(2) +
+                "%";
+
+
+            // --------------------------------------------
+            // Show result
+            // --------------------------------------------
+
+            result.style.display =
+                "block";
+
+            status.innerText =
+                "Analysis completed successfully.";
+
+
+        } catch (error) {
+
+            status.innerText =
+                "Error: " +
+                error.message;
+
+            result.style.display =
+                "none";
+
+        }
+
+
+        // ------------------------------------------------
+        // Enable button again
+        // ------------------------------------------------
+
+        button.disabled = false;
+
+        button.innerText =
+            "Analyze Audio";
+    }
+
+</script>
+
+
+</body>
+
+</html>
+
